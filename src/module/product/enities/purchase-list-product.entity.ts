@@ -15,7 +15,7 @@ export class PurchaseListProduct extends BaseEntity {
 
     @Column()
     count: number;
-
+    
     @Column()
     purchaseListId: number;
     @ManyToOne(() => PurchaseListEntity, {onDelete:'CASCADE', onUpdate: 'CASCADE'})
