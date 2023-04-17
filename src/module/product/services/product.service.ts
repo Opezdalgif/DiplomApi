@@ -38,11 +38,13 @@ export class ProductService {
      * @param createDto 
      * @returns 
      */
-
+    
     async create(createDto: ProductCreateDto, icon: any){
         let priceRub;
         const iconPath = await this.fileService.create(icon)
-        await this.getConverter(Number(createDto.priceCHY), Number(createDto.priceDelevery)).then(resp => priceRub = (resp.toFixed(2)))
+        await this.getConverter(Number(createDto.priceCHY), Number(createDto.priceDelevery)).then(resp => 
+            priceRub = (resp.toFixed(2))
+        )
             
         const product = await this.productRepository.create({
             name: createDto.name,
@@ -52,7 +54,8 @@ export class ProductService {
             length: Number(createDto.length),
             width: Number(createDto.width),
             height: Number(createDto.height),
-            icon: iconPath
+            icon: iconPath,
+            supplierId: Number(createDto.supplierId)
         })
         
         try {
@@ -79,7 +82,11 @@ export class ProductService {
      */
     
     async findAll() {
-        return this.productRepository.find();
+        return this.productRepository.find({
+           relations: {
+                supplier: {}
+           } 
+        });
     }
 
     async getExists(whereDto: ProductGetDto) {
@@ -91,7 +98,7 @@ export class ProductService {
 
         return product
     }
-
+    
     /**
      * Обновление товаров
      * @param productId 

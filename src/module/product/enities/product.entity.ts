@@ -31,10 +31,10 @@ export class ProductEntity extends BaseEntity {
     @Column({nullable: false})
     icon: string;
 
-    // @Column()
-    // supplierId: number;
-    // @ManyToOne(() => SupplierEntity, (supplier) => supplier.products)
-    // @JoinColumn({name: 'supplierId'})
-    // supplier: SupplierEntity;
+    @Column()
+    supplierId: number;
+    @ManyToOne(() => SupplierEntity, (supplier) => supplier.products,{onDelete:'CASCADE', onUpdate: 'CASCADE'})
+    @JoinColumn({name: 'supplierId'})
+    supplier: SupplierEntity;
        
 }

@@ -13,13 +13,13 @@ export class SupplierEntity extends BaseEntity {
     description: string;
 
     @Column({nullable: false})
-    photo: string;
+    icon: string;
 
     @Column({nullable: false})
     contract: string;
 
-    // @OneToMany(() => ProductEntity, (product) => product.supplier)
-    // products: ProductEntity[];
+    @OneToMany(() => ProductEntity, (product) => product.supplier )
+    products: ProductEntity[];
 
     
 }

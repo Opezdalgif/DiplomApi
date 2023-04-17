@@ -26,5 +26,9 @@ export class ProductCreateDto {
     @IsNotEmpty({message: 'Поле должно быть заполнено'})
     @IsString({message: 'Поле должно быть строкой'})
     readonly height: string;
+
+    @IsNotEmpty({message: 'Поле должно быть заполнено'})
+    @IsString({message: 'Поле должно быть строкой'})
+    readonly supplierId: string
    
 }
