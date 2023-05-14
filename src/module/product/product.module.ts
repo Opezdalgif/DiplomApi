@@ -10,11 +10,12 @@ import { PurchaseListController } from './controllers/purchase-list.controller';
 import { PurchaseListProduct } from './enities/purchase-list-product.entity';
 import { SupplierEntity } from '../supplier/enities/supplier.entity';
 import { FilesModule } from '../files/files.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([ProductEntity, PurchaseListEntity, PurchaseListProduct, SupplierEntity]),
-    forwardRef(() => FilesModule)
+    forwardRef(() => FilesModule), ScheduleModule.forRoot()
   ],
   providers: [ProductService,PurchaseListService ],
   controllers: [ProductController, PurchaseListController],

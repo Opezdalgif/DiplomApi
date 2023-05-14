@@ -10,6 +10,8 @@ import { UsersEntity } from './module/users/enities/users.enities';
 import { UsersModule } from './module/users/users.module';
 import { SupplierModule } from './module/supplier/supplier.module';
 import { FilesModule } from './module/files/files.module';
+import { StatisticsModule } from './module/statistics/statistics.module';
+
 ;
 
 
@@ -35,7 +37,8 @@ import { FilesModule } from './module/files/files.module';
     ProductModule,
     OfferModule,
     SupplierModule,
-    FilesModule
+    FilesModule,
+    StatisticsModule
   ],
   controllers: [],
   providers:[]

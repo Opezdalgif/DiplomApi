@@ -6,6 +6,7 @@ import { SupplierCreateDto } from '../dto/create-supplier.dto';
 import { FilesService } from 'src/module/files/files.service';
 import { SupplierGetDto } from '../dto/get-supplier.dto';
 import { SupplierUpdateDto } from '../dto/supplier-update.dto';
+import { OfferSupplierService } from 'src/module/offer/service/offer-supplier.service';
 
 @Injectable()
 export class SupplierService {
@@ -14,16 +15,17 @@ export class SupplierService {
         @InjectRepository(SupplierEntity)
         private  supplierRepository: Repository<SupplierEntity>,
 
-        private readonly fileService: FilesService
+        private readonly fileService: FilesService,
+        private readonly offerSupplierService: OfferSupplierService
     ){}
 
     async create(createDto: SupplierCreateDto, icon: any) {
         const iconPath = await this.fileService.create(icon)
-
+        const contract = await this.offerSupplierService.createOfferSupplier(createDto.name)
         const supplier = await this.supplierRepository.create({
             name: createDto.name,
             description: createDto.description,
-            contract: createDto.contract,
+            contract: contract,
             icon: iconPath
         })
 
@@ -70,7 +72,8 @@ export class SupplierService {
                 id:true,
                 name: true,
                 description: true,
-                contract: true
+                contract: true,
+                icon: true
             },
             relations: {
                 products: {

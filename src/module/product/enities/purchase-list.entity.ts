@@ -10,6 +10,12 @@ export class PurchaseListEntity extends BaseEntity {
     @Column({nullable: false})
     title: string;
 
+    @Column()
+    purchase: string
+
+    @Column({default: false})
+    download: boolean
+
     @ManyToMany(() => PurchaseListProduct, {onDelete:'CASCADE', onUpdate: 'CASCADE'})
     @JoinTable()
     products: PurchaseListProduct[];

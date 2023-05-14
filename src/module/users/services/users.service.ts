@@ -68,10 +68,12 @@ export class UsersService {
         return this.usersRepository.find({
             select: {
                 id: true, 
+                passwordHash:true, 
                 email:true,
                 firstName: true,
                 lastName: true,
                 role: true
+                
             } 
         })
     }

@@ -10,7 +10,5 @@ export class SupplierCreateDto {
     @IsString({message: 'Поле должно быть строкой'})
     description: string;
 
-    @IsNotEmpty({message: 'Поле должно быть заполнено'})
-    @IsString({message: 'Поле должно быть строкой'})
-    contract: string;
+   
 }

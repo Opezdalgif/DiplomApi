@@ -12,8 +12,8 @@ import {
 } from 'docx';
 import * as fs from 'fs';
 import { text } from 'stream/consumers';
-import { PurchaseListService } from '../product/services/purchase-list.service';
-import { OfferCreateDto } from './dto/offer-create.dto';
+import { PurchaseListService } from '../../product/services/purchase-list.service';
+import { OfferCreateDto } from '../dto/offer-create.dto';
 
 @Injectable()
 export class OfferService {
@@ -279,7 +279,7 @@ export class OfferService {
                     ],
                 }),
             ]
-          })
+        })
           let sum= 0;
           let k = 0
           for(let i of list.products) {
@@ -469,7 +469,7 @@ export class OfferService {
         });
 
         const buffer = await Packer.toBuffer(doc);
-
+        
         if (!fs.existsSync('results')) {
             fs.mkdirSync('results', { recursive: true });
         }

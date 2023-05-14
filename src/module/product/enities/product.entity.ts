@@ -6,7 +6,7 @@ import { BaseEntity , Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinCol
 export class ProductEntity extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-
+    
     @Column({nullable: false})
     name: string;
     

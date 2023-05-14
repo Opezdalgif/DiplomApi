@@ -33,7 +33,10 @@ export class PurchaseListService{
 
     async create(createDto: PurchaseListCreateDto) {
         
-        const purchaseList = this.purchaseListRepository.create(createDto)
+        const purchaseList = this.purchaseListRepository.create({
+            title: createDto.title,
+            purchase: "not"
+        })
 
 
         try {
@@ -56,6 +59,8 @@ export class PurchaseListService{
             select: {
                 id:true,
                 title: true,
+                purchase:true,
+                download: true
             },
             where: whereDto,
             relations: {
@@ -76,6 +81,8 @@ export class PurchaseListService{
             select: {
                 id:true,
                 title: true,
+                purchase: true,
+                download: true
             },
             relations: {
                 products: {
@@ -160,7 +167,7 @@ export class PurchaseListService{
         const product = await this.productService.getExists({id: addDto.productId})
 
         if( product && purchaseList) {
-            
+
             this.logger.log('Я в условии')
             const relationProduct = await this.purchaseListProductRepository.create({purchaseListId: purchaseList.id, productId: product.id , count: addDto.count}).save()
             await purchaseList.products.push(relationProduct)

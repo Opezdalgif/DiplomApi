@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotFoundError } from 'rxjs';
 import { Repository } from 'typeorm';
@@ -9,6 +9,8 @@ import { ProductEntity } from '../enities/product.entity';
 import * as CC from 'currency-converter-lt'
 import { response } from 'express';
 import { FilesService } from 'src/module/files/files.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
+import axios from 'axios';
 
 @Injectable()
 export class ProductService {
@@ -21,16 +23,41 @@ export class ProductService {
     ){}
 
 
-    /**
+    @Cron(CronExpression.EVERY_12_HOURS)
+    async updatePrice() {
+        this.logger.log('Функция обновления стоимости началась')
+        let priceRub;
+        const product = await this.findAll()
+
+        for(let products of product) {
+            
+            await this.getConverter(Number(products.priceCHY), Number(products.priceDelevery)).then(resp => 
+               priceRub = resp
+            )
+            
+            products.priceRu = Math.round(priceRub);
+            try {
+                await products.save()
+            } catch(e) {
+                this.logger.error(e)
+                throw new BadRequestException(`Произошла ошибка в обновлении стоимости оборудования`)
+            }
+            
+        }
+    }
+    
+     /**
      * Конвертор валют
      * @param count 
      * @returns 
      */
-
     async getConverter(count: number, delivery: number){
-        let currenceConverter =  new CC({ from: "CNY", to: "RUB", amount:  count});
-        let price =  await currenceConverter.convert()
-        price = price + delivery
+        
+        let yuan = await axios.get(
+            `https://api.currencyscoop.com/v1/latest?base=CNY&symbols=RUB&api_key=62a62183641bea075b240e1da94dabae`,
+        );
+        
+        let price = (yuan.data.response.rates['RUB'] * count) + delivery;
         return price
     }
     /**
@@ -43,9 +70,8 @@ export class ProductService {
         let priceRub;
         const iconPath = await this.fileService.create(icon)
         await this.getConverter(Number(createDto.priceCHY), Number(createDto.priceDelevery)).then(resp => 
-            priceRub = (resp.toFixed(2))
+            priceRub = (Math.round(resp))
         )
-            
         const product = await this.productRepository.create({
             name: createDto.name,
             priceCHY: Number(createDto.priceCHY),
