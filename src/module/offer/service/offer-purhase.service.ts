@@ -4,6 +4,8 @@ import { OfferPurchaseCreateDto } from "../dto/offer-purhase-create.dto";
 import { Document, Packer, Paragraph, Table, TableCell, TableRow, TextRun } from "docx";
 import * as fs from 'fs';
 import { StatisticsService } from "src/module/statistics/statistics.service";
+import { OfferCancellationDto } from "../dto/offer-cancellation.dto";
+import { log } from "console";
 
 @Injectable()
 export class OfferPurchaseService {
@@ -303,7 +305,11 @@ export class OfferPurchaseService {
     
         try {
             await list.save()
-            await this.statisticsService.create(Number(dateArr[1]), Number(dateArr[2]), list.title)
+            await this.statisticsService.create({
+                month: Number(dateArr[1]), 
+                year: Number(dateArr[2]), 
+                purchase: list.title
+            })
         } catch (e) {
             console.log(e)
             throw new BadRequestException(`Произошла ошибка в создании закупки оборудования`)
@@ -311,5 +317,21 @@ export class OfferPurchaseService {
         
     }
 
+    async cancellationDoc(dto: OfferCancellationDto) {
+        let list = await this.purchaseListService.getExists({
+            id: dto.listId
+        })
+
+        list.purchase = '',
+        list.download = false;
+
+        try {
+            await list.save()
+        } catch (e) {
+            console.log(e);
+            throw new BadRequestException(`Произошла ошибка в отмене документа`)
+            
+        }
+    }
     
 }

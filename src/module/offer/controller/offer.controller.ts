@@ -4,6 +4,7 @@ import { OfferService } from '../service/offer.service';
 import { OfferPurchaseCreateDto } from '../dto/offer-purhase-create.dto';
 import { OfferPurchaseService } from '../service/offer-purhase.service';
 import { OfferSupplierService } from '../service/offer-supplier.service';
+import { OfferCancellationDto } from '../dto/offer-cancellation.dto';
 
 @Controller('offer')
 export class OfferController {
@@ -23,8 +24,8 @@ export class OfferController {
         return this.offerPurchaseService.createPurchaseEquipment(dto)
     }
 
-    // @Post('createSupplier')
-    // createSupplier() {
-    //     return this.offerSupplierService.createOfferSupplier()
-    // }
+    @Post('cancellation')
+    cancellationDoc(@Body() dto: OfferCancellationDto) {
+        return this.offerPurchaseService.cancellationDoc(dto)
+    }
 }

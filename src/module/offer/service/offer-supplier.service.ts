@@ -13,7 +13,7 @@ export class OfferSupplierService {
 
         const dateTime = new Date();
         let date = dateTime.toLocaleDateString();
-        let dateArr = date.split('.');
+        let dateArr = date.split('/');
         let yearDate = Number(dateArr[2]) + 1;
 
         const doc = new Document({

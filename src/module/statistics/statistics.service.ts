@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { StatisticsEntity } from './enities/statistics.enities';
 import { Repository } from 'typeorm';
 import { StatisticsGetDto } from './dto/statistics-get.dto';
+import { StatisticsCreateDto } from './dto/statistics-create.dto';
 
 
 @Injectable()
@@ -13,11 +14,11 @@ export class StatisticsService {
         private readonly statisticsRepository: Repository<StatisticsEntity>
     ){}
 
-    async create(month: number, year: number, purchase: string) {
+    async create(dto: StatisticsCreateDto) {
         let statistics = await this.statisticsRepository.create({
-            month: month,
-            year: year,
-            purchase: purchase
+            month: dto.month,
+            year: dto.year,
+            purchase: dto.purchase
         });
 
         try { 
